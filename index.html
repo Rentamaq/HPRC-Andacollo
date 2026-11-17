@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Estándares HPRC Teck</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root{
+  --bg:#eef1f3; --card:#ffffff; --ink:#1f2328; --muted:#5d6470; --line:#d5dbe0;
+  --accent:#e0a100; --accent-ink:#1f2328; --danger:#c8372d;
+  --ill-sky:#e6eef5; --ill-ground:#c9b48f; --ill-rock:#a08a68; --ill-rock2:#7d6a4f;
+  --ill-yellow:#f2b705; --ill-dark:#2b2f36; --ill-glass:#9fc6df; --ill-wheel:#2b2f36;
+  --ill-white:#ffffff; --ill-red:#d64545; --ill-orange:#f07f1a; --ill-water:#4a8fc0;
+  --ill-water2:#7fb4da; --ill-gray:#8b9098; --ill-load:#9b6a3c;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16181c; --card:#1f2228; --ink:#ecebe7; --muted:#a3a8b1; --line:#343842;
+    --accent:#f2b705; --accent-ink:#16181c; --danger:#ff6b5e;
+    --ill-sky:#2a3440; --ill-ground:#6d5f48; --ill-rock:#7f6d52; --ill-rock2:#5c4e3a;
+    --ill-glass:#5d8aa8; --ill-white:#e9e9e9; --ill-water:#2f6c99; --ill-water2:#4f8cbb; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16181c; --card:#1f2228; --ink:#ecebe7; --muted:#a3a8b1; --line:#343842;
+  --accent:#f2b705; --accent-ink:#16181c; --danger:#ff6b5e;
+  --ill-sky:#2a3440; --ill-ground:#6d5f48; --ill-rock:#7f6d52; --ill-rock2:#5c4e3a;
+  --ill-glass:#5d8aa8; --ill-white:#e9e9e9; --ill-water:#2f6c99; --ill-water2:#4f8cbb; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+.wrap{max-width:1080px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (prefers-reduced-motion:reduce){.pic svg{transition:none}.pic:hover svg{transform:none}}
+header h1{margin:0;font-size:clamp(1.4rem,3.5vw,2rem);letter-spacing:-.01em}
+header p{margin:.35rem 0 0;color:var(--muted);max-width:70ch}
+.bar{height:6px;background:repeating-linear-gradient(-45deg,var(--accent) 0 14px,var(--ill-dark) 14px 28px);border-radius:3px;margin:14px 0 18px}
+
+.strip{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin}
+.thumb{flex:0 0 auto;width:84px;border:2px solid var(--line);background:var(--card);border-radius:10px;padding:4px;cursor:pointer;color:var(--ink);font:inherit;text-align:center}
+.thumb svg{display:block;width:100%;height:auto;border-radius:6px}
+.thumb span{display:block;font-size:.72rem;font-weight:700;margin-top:3px}
+.thumb[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.thumb:focus-visible,.nav button:focus-visible,.pic:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.stage{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:6px}
+@media (max-width:760px){.stage{grid-template-columns:1fr;padding:14px}}
+.pic{position:relative;display:block;align-self:start;border-radius:12px;overflow:hidden;border:1px solid var(--line);text-decoration:none;color:inherit}
+.pic svg{display:block;width:100%;height:auto;transition:transform .25s}
+.pic:hover svg{transform:scale(1.03)}
+.pic .open{position:absolute;left:10px;bottom:10px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.85rem;padding:7px 12px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.code{display:inline-block;background:var(--ill-dark);color:#fff;font-weight:800;padding:3px 10px;border-radius:6px;font-size:.85rem;letter-spacing:.04em}
+.info h2{margin:.5rem 0 .25rem;font-size:clamp(1.25rem,3vw,1.7rem);line-height:1.2}
+.rev{color:var(--muted);font-size:.82rem}
+.lead{margin:.7rem 0 1rem;font-size:1.02rem}
+.info h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:1rem 0 .4rem}
+.info ul{margin:0;padding-left:1.1rem}
+.info li{margin:.25rem 0}
+.info li b{color:var(--ink)}
+.cl{color:var(--muted);font-size:.8rem;white-space:nowrap}
+.field{border-left:4px solid var(--danger);background:color-mix(in srgb,var(--danger) 8%,transparent);padding:8px 12px;border-radius:0 8px 8px 0;margin-top:.4rem}
+.field ul{padding-left:1rem}
+
+.nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.nav button{font:inherit;font-weight:700;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:10px;padding:9px 16px;cursor:pointer}
+.nav button:hover{border-color:var(--accent)}
+.count{color:var(--muted);font-weight:600}
+footer{margin-top:24px;color:var(--muted);font-size:.85rem}
+footer a{color:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Estándares HPRC · Riesgos altos potenciales</h1>
+    <p>Los 14 estándares Teck que aplican en faena, uno a uno. Pincha la imagen para abrir el documento oficial (PDF en Drive). Usa las flechas del teclado o las miniaturas para avanzar.</p>
+  </header>
+  <div class="bar" aria-hidden="true"></div>
+
+  <nav class="strip" id="strip" aria-label="Lista de estándares"></nav>
+
+  <main class="stage" id="stage" aria-live="polite">
+    <a class="pic" id="pic" target="_blank" rel="noopener"></a>
+    <section class="info" id="info"></section>
+  </main>
+
+  <div class="nav">
+    <button id="prev" type="button">← Anterior</button>
+    <span class="count" id="count"></span>
+    <button id="next" type="button">Siguiente →</button>
+  </div>
+
+  <footer>
+    Reglas comunes: aplican también a contratistas y son obligatorios salvo exención formal aprobada por el VP de la Unidad de Negocio y el VP de Salud y Seguridad. La cinta de peligro no se considera barricada.
+    Los números entre corchetes son cláusulas del estándar. La carpeta no incluye HPRC-13, HPRC-15 ni HPRC-16 (Barricadas).
+    · <a href="https://drive.google.com/drive/folders/14zAcVbBlLNZ2hqHFWgs56Vu832uKujrW?usp=sharing" target="_blank" rel="noopener">Carpeta completa en Drive</a>
+  </footer>
+</div>
+
+<script>
+function star(cx,cy,ro,ri,n){const p=[];for(let i=0;i<2*n;i++){const r=i%2?ri:ro,a=Math.PI*i/n-Math.PI/2;p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1))}return p.join(' ')}
+const W=(cx,cy,r)=>`<circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--ill-wheel)"/><circle cx="${cx}" cy="${cy}" r="${r*.4}" fill="var(--ill-gray)"/>`;
+const SKY=`<rect width="200" height="140" fill="var(--ill-sky)"/>`;
+const GROUND=`<rect y="112" width="200" height="28" fill="var(--ill-ground)"/>`;
+const CHOCK=(x)=>`<polygon points="${x},112 ${x+12},112 ${x},101" fill="var(--ill-orange)"/>`;
+
+const ART={
+'01':SKY+GROUND+
+ `<polygon points="0,112 0,80 125,80 150,112" fill="var(--ill-rock)"/>
+  <polygon points="${star(78,62,40,17,12)}" fill="var(--ill-orange)"/>
+  <polygon points="${star(78,62,22,10,10)}" fill="var(--ill-yellow)"/>
+  <polygon points="30,34 37,30 39,37" fill="var(--ill-rock2)"/><polygon points="128,30 136,33 131,40" fill="var(--ill-rock2)"/>
+  <polygon points="118,58 126,56 124,64" fill="var(--ill-rock2)"/><polygon points="40,62 46,58 48,66" fill="var(--ill-rock2)"/>
+  <polyline points="78,82 100,96 150,98 168,108" fill="none" stroke="var(--ill-red)" stroke-width="2" stroke-dasharray="4 3"/>
+  <line x1="178" y1="112" x2="178" y2="62" stroke="var(--ill-dark)" stroke-width="3"/>
+  <polygon points="178,62 198,69 178,76" fill="var(--ill-red)"/>`,
+'02':SKY+GROUND+
+ `<rect x="22" y="48" width="156" height="56" rx="9" fill="var(--ill-yellow)"/>
+  <rect x="22" y="88" width="156" height="5" fill="var(--ill-white)" opacity=".8"/>
+  ${[0,1,2,3,4,5].map(i=>`<rect x="${32+i*20}" y="57" width="16" height="18" rx="2" fill="var(--ill-glass)"/>`).join('')}
+  <rect x="155" y="57" width="16" height="35" rx="2" fill="var(--ill-glass)" stroke="var(--ill-dark)" stroke-width="1"/>
+  <rect x="94" y="41" width="12" height="7" rx="2" fill="var(--ill-orange)"/>
+  ${W(55,104,12)}${W(148,104,12)}`,
+'03':SKY+GROUND+
+ `<rect x="128" y="106" width="68" height="6" fill="var(--ill-red)"/>
+  ${[0,1,2,3,4].map(i=>`<rect x="${132+i*14}" y="106" width="7" height="6" fill="var(--ill-white)"/>`).join('')}
+  <line x1="36" y1="98" x2="18" y2="110" stroke="var(--ill-dark)" stroke-width="4"/><rect x="8" y="108" width="20" height="4" fill="var(--ill-load)"/>
+  <line x1="104" y1="98" x2="122" y2="110" stroke="var(--ill-dark)" stroke-width="4"/><rect x="112" y="108" width="20" height="4" fill="var(--ill-load)"/>
+  <rect x="28" y="82" width="84" height="18" rx="3" fill="var(--ill-yellow)"/>
+  <rect x="88" y="66" width="24" height="18" rx="3" fill="var(--ill-yellow)"/><rect x="94" y="70" width="13" height="9" fill="var(--ill-glass)"/>
+  <line x1="56" y1="82" x2="160" y2="22" stroke="var(--ill-yellow)" stroke-width="8" stroke-linecap="round"/>
+  <line x1="56" y1="82" x2="160" y2="22" stroke="var(--ill-dark)" stroke-width="1" stroke-dasharray="3 5"/>
+  <line x1="160" y1="22" x2="160" y2="62" stroke="var(--ill-dark)" stroke-width="1.5"/>
+  <path d="M160 62 v5 a4 4 0 1 1 -6 3" fill="none" stroke="var(--ill-dark)" stroke-width="2"/>
+  <line x1="152" y1="70" x2="146" y2="78" stroke="var(--ill-dark)"/><line x1="160" y1="70" x2="174" y2="78" stroke="var(--ill-dark)"/>
+  <rect x="140" y="78" width="40" height="18" fill="var(--ill-load)"/>
+  <polyline points="180,90 192,104" stroke="var(--ill-dark)" stroke-dasharray="3 2" fill="none"/>
+  ${W(44,102,7)}${W(96,102,7)}`,
+'04':SKY+GROUND+
+ `<rect x="58" y="112" width="6" height="28" fill="var(--ill-rock2)"/>
+  <line x1="61" y1="40" x2="61" y2="132" stroke="var(--ill-gray)" stroke-width="3"/>
+  <circle cx="50" cy="108" r="7" fill="var(--ill-ground)" opacity=".8"/><circle cx="72" cy="106" r="8" fill="var(--ill-ground)" opacity=".8"/>
+  <rect x="26" y="96" width="112" height="16" rx="8" fill="var(--ill-dark)"/>
+  ${[0,1,2,3,4].map(i=>`<circle cx="${38+i*22}" cy="104" r="4" fill="var(--ill-gray)"/>`).join('')}
+  <rect x="40" y="76" width="70" height="20" rx="3" fill="var(--ill-yellow)"/>
+  <rect x="104" y="58" width="30" height="38" rx="3" fill="var(--ill-yellow)"/><rect x="110" y="63" width="18" height="14" fill="var(--ill-glass)"/>
+  <rect x="54" y="12" width="14" height="80" fill="none" stroke="var(--ill-yellow)" stroke-width="4"/>
+  ${[0,1,2,3].map(i=>`<line x1="54" y1="${14+i*20}" x2="68" y2="${34+i*20}" stroke="var(--ill-yellow)" stroke-width="2"/>`).join('')}`,
+'05':SKY+
+ `<polygon points="100,14 172,126 28,126" fill="var(--ill-yellow)" stroke="var(--ill-dark)" stroke-width="7" stroke-linejoin="round"/>
+  <polygon points="108,44 80,90 98,90 88,116 124,72 104,72 116,44" fill="var(--ill-dark)"/>
+  <line x1="14" y1="20" x2="14" y2="130" stroke="var(--ill-rock2)" stroke-width="4"/><line x1="4" y1="26" x2="24" y2="26" stroke="var(--ill-rock2)" stroke-width="3"/>
+  <line x1="186" y1="20" x2="186" y2="130" stroke="var(--ill-rock2)" stroke-width="4"/><line x1="176" y1="26" x2="196" y2="26" stroke="var(--ill-rock2)" stroke-width="3"/>
+  <path d="M6 26 Q100 44 178 26 M22 26 Q100 50 194 26" fill="none" stroke="var(--ill-dark)" stroke-width="1.5"/>`,
+'06':SKY+GROUND+
+ `<rect x="14" y="34" width="96" height="7" fill="var(--ill-dark)"/><rect x="14" y="41" width="96" height="4" fill="var(--ill-yellow)"/>
+  <line x1="22" y1="45" x2="22" y2="112" stroke="var(--ill-dark)" stroke-width="4"/><line x1="102" y1="45" x2="102" y2="112" stroke="var(--ill-dark)" stroke-width="4"/>
+  <line x1="14" y1="16" x2="110" y2="16" stroke="var(--ill-yellow)" stroke-width="3"/><line x1="14" y1="16" x2="14" y2="34" stroke="var(--ill-yellow)" stroke-width="3"/><line x1="110" y1="16" x2="110" y2="34" stroke="var(--ill-yellow)" stroke-width="3"/>
+  <g transform="rotate(35 140 64)"><rect x="128" y="60" width="26" height="7" rx="3" fill="var(--ill-gray)"/><circle cx="156" cy="63.5" r="7" fill="var(--ill-gray)"/><circle cx="159" cy="63.5" r="3.5" fill="var(--ill-sky)"/></g>
+  <line x1="128" y1="34" x2="128" y2="50" stroke="var(--ill-dark)" stroke-width="1.5"/><line x1="140" y1="32" x2="140" y2="46" stroke="var(--ill-dark)" stroke-width="1.5"/><line x1="152" y1="36" x2="152" y2="50" stroke="var(--ill-dark)" stroke-width="1.5"/>
+  <line x1="120" y1="112" x2="120" y2="86" stroke="var(--ill-dark)" stroke-width="3"/><line x1="190" y1="112" x2="190" y2="86" stroke="var(--ill-dark)" stroke-width="3"/>
+  <rect x="118" y="86" width="74" height="7" fill="var(--ill-red)"/>
+  ${[0,1,2,3,4].map(i=>`<rect x="${122+i*14}" y="86" width="7" height="7" fill="var(--ill-white)"/>`).join('')}`,
+'07':SKY+
+ `<polygon points="0,22 58,22 72,48 104,48 120,78 150,78 172,140 0,140" fill="var(--ill-rock)"/>
+  <polygon points="150,78 200,78 200,140 172,140" fill="var(--ill-ground)"/>
+  <polyline points="20,22 26,34 22,44 30,56" fill="none" stroke="var(--ill-dark)" stroke-width="2.5"/>
+  <polyline points="80,48 86,60 82,70" fill="none" stroke="var(--ill-dark)" stroke-width="2.5"/>
+  <polygon points="122,86 132,82 134,92 124,94" fill="var(--ill-rock2)"/>
+  <polygon points="138,98 146,96 146,104 138,105" fill="var(--ill-rock2)"/>
+  <polygon points="150,112 160,110 160,118 150,119" fill="var(--ill-rock2)"/>
+  <rect x="172" y="70" width="22" height="8" rx="2" fill="var(--ill-ground)" stroke="var(--ill-rock2)"/>
+  <polygon points="183,30 198,56 168,56" fill="var(--ill-yellow)" stroke="var(--ill-dark)" stroke-width="2"/>
+  <text x="183" y="53" text-anchor="middle" font-size="16" font-weight="900" fill="var(--ill-dark)">!</text>`,
+'08':SKY+GROUND+
+ `<polygon points="10,80 44,82 44,110 14,110" fill="var(--ill-dark)"/>
+  <line x1="72" y1="74" x2="40" y2="92" stroke="var(--ill-yellow)" stroke-width="9" stroke-linecap="round"/>
+  <rect x="60" y="62" width="104" height="30" rx="4" fill="var(--ill-yellow)"/>
+  <rect x="94" y="30" width="40" height="34" rx="3" fill="var(--ill-yellow)"/><rect x="100" y="35" width="28" height="22" fill="var(--ill-glass)"/>
+  <rect x="108" y="23" width="10" height="7" rx="2" fill="var(--ill-orange)"/>
+  <rect x="60" y="80" width="104" height="4" fill="var(--ill-white)" opacity=".85"/>
+  ${W(82,96,18)}${W(146,96,18)}${CHOCK(166)}`,
+'09':SKY+
+ `<path d="M76 70 V48 a24 24 0 0 1 48 0 V70" fill="none" stroke="var(--ill-gray)" stroke-width="10"/>
+  <rect x="62" y="66" width="76" height="58" rx="9" fill="var(--ill-red)"/>
+  <circle cx="100" cy="88" r="7" fill="var(--ill-dark)"/><rect x="97" y="90" width="6" height="16" rx="2" fill="var(--ill-dark)"/>
+  <line x1="124" y1="56" x2="150" y2="64" stroke="var(--ill-dark)" stroke-width="1.5"/>
+  <g transform="rotate(8 166 84)"><rect x="144" y="62" width="46" height="56" rx="4" fill="var(--ill-white)" stroke="var(--ill-red)" stroke-width="3"/>
+  <circle cx="167" cy="68" r="2.5" fill="var(--ill-dark)"/>
+  <text x="167" y="86" text-anchor="middle" font-size="9" font-weight="900" fill="var(--ill-red)">PELIGRO</text>
+  <text x="167" y="99" text-anchor="middle" font-size="7" font-weight="700" fill="#2b2f36">NO</text>
+  <text x="167" y="108" text-anchor="middle" font-size="7" font-weight="700" fill="#2b2f36">OPERAR</text></g>
+  <text x="38" y="112" text-anchor="middle" font-size="22" font-weight="900" fill="var(--ill-dark)">0 V</text>`,
+'10':SKY+GROUND+
+ `<line x1="164" y1="74" x2="164" y2="10" stroke="var(--ill-dark)" stroke-width="2"/>
+  <polygon points="164,10 186,16 164,22" fill="var(--ill-red)"/><circle cx="164" cy="9" r="3" fill="var(--ill-orange)"/>
+  <rect x="20" y="70" width="160" height="28" rx="6" fill="var(--ill-white)" stroke="var(--ill-dark)" stroke-width="1.5"/>
+  <polygon points="58,70 74,44 122,44 128,70" fill="var(--ill-white)" stroke="var(--ill-dark)" stroke-width="1.5"/>
+  <polygon points="66,68 78,48 96,48 96,68" fill="var(--ill-glass)"/><polygon points="100,68 100,48 118,48 123,68" fill="var(--ill-glass)"/>
+  <rect x="88" y="38" width="16" height="6" rx="2" fill="var(--ill-orange)"/>
+  <rect x="20" y="82" width="160" height="4" fill="var(--ill-red)" opacity=".8"/>
+  ${W(52,100,13)}${W(148,100,13)}${CHOCK(163)}`,
+'11':
+ `<rect width="200" height="140" fill="var(--ill-sky)"/><rect y="44" width="200" height="96" fill="var(--ill-ground)"/>
+  <polygon points="88,44 112,44 196,140 4,140" fill="var(--ill-dark)"/>
+  <polygon points="99,50 101,50 102,60 98,60" fill="var(--ill-yellow)"/><polygon points="98,70 102,70 104,86 96,86" fill="var(--ill-yellow)"/><polygon points="96,98 104,98 107,124 93,124" fill="var(--ill-yellow)"/>
+  <line x1="166" y1="100" x2="166" y2="52" stroke="var(--ill-gray)" stroke-width="3"/>
+  <circle cx="166" cy="40" r="18" fill="var(--ill-white)" stroke="var(--ill-red)" stroke-width="5"/>
+  <text x="166" y="46" text-anchor="middle" font-size="16" font-weight="900" fill="#2b2f36">30</text>
+  <polygon points="34,124 42,96 50,124" fill="var(--ill-orange)"/><rect x="38" y="106" width="8" height="4" fill="var(--ill-white)"/>
+  <polygon points="16,104 22,84 28,104" fill="var(--ill-orange)"/>`,
+'12':SKY+GROUND+
+ `<rect x="30" y="94" width="76" height="14" rx="3" fill="var(--ill-yellow)"/>${W(44,110,6)}${W(92,110,6)}
+  <line x1="66" y1="94" x2="138" y2="46" stroke="var(--ill-yellow)" stroke-width="8" stroke-linecap="round"/>
+  <line x1="66" y1="94" x2="138" y2="46" stroke="var(--ill-dark)" stroke-width="1" stroke-dasharray="3 5"/>
+  <circle cx="148" cy="16" r="7" fill="#e3b58f"/><path d="M140 14 a8 8 0 0 1 16 0 z" fill="var(--ill-yellow)"/>
+  <rect x="143" y="23" width="11" height="18" rx="3" fill="var(--ill-orange)"/>
+  <path d="M154 30 q14 4 12 16" fill="none" stroke="var(--ill-red)" stroke-width="2.5"/>
+  <rect x="122" y="44" width="52" height="16" fill="var(--ill-dark)"/>
+  <line x1="122" y1="30" x2="174" y2="30" stroke="var(--ill-dark)" stroke-width="3"/>
+  <line x1="122" y1="30" x2="122" y2="44" stroke="var(--ill-dark)" stroke-width="3"/><line x1="174" y1="30" x2="174" y2="44" stroke="var(--ill-dark)" stroke-width="3"/>
+  <line x1="122" y1="37" x2="174" y2="37" stroke="var(--ill-dark)" stroke-width="1.5"/>
+  <text x="44" y="40" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ill-dark)">&gt;1,8 m</text>
+  <line x1="44" y1="48" x2="44" y2="86" stroke="var(--ill-dark)" stroke-width="1.5" stroke-dasharray="3 3"/>`,
+'14':SKY+
+ `<rect y="78" width="200" height="62" fill="var(--ill-water)"/>
+  <path d="M60 92 q10 -6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="var(--ill-water2)" stroke-width="3"/>
+  <path d="M70 112 q10 -6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="var(--ill-water2)" stroke-width="3"/>
+  <polygon points="0,70 52,70 78,140 0,140" fill="var(--ill-ground)"/>
+  <rect x="8" y="58" width="44" height="12" rx="3" fill="var(--ill-rock)"/>
+  <line x1="18" y1="58" x2="18" y2="40" stroke="var(--ill-dark)" stroke-width="2"/><line x1="46" y1="58" x2="46" y2="40" stroke="var(--ill-dark)" stroke-width="2"/>
+  <rect x="16" y="40" width="32" height="5" fill="var(--ill-red)"/><rect x="24" y="40" width="8" height="5" fill="var(--ill-white)"/><rect x="40" y="40" width="6" height="5" fill="var(--ill-white)"/>
+  <circle cx="140" cy="100" r="18" fill="none" stroke="var(--ill-white)" stroke-width="10"/>
+  <circle cx="140" cy="100" r="18" fill="none" stroke="var(--ill-red)" stroke-width="10" stroke-dasharray="14.14 14.14"/>
+  <path d="M156 18 h12 l4 10 l4 -10 h12 l4 8 v32 h-40 v-32 z" fill="var(--ill-orange)" stroke="var(--ill-dark)" stroke-width="1.5"/>
+  <rect x="152" y="40" width="40" height="5" fill="var(--ill-white)"/><line x1="172" y1="28" x2="172" y2="58" stroke="var(--ill-dark)" stroke-width="1.5"/>`,
+'17':SKY+
+ `<rect x="20" y="96" width="160" height="10" fill="var(--ill-gray)"/><line x1="40" y1="106" x2="40" y2="140" stroke="var(--ill-dark)" stroke-width="5"/><line x1="160" y1="106" x2="160" y2="140" stroke="var(--ill-dark)" stroke-width="5"/>
+  <rect x="60" y="86" width="70" height="10" fill="var(--ill-rock2)"/>
+  <line x1="150" y1="60" x2="102" y2="86" stroke="var(--ill-dark)" stroke-width="6" stroke-linecap="round"/>
+  <polygon points="${star(100,86,15,5,8)}" fill="var(--ill-yellow)"/><circle cx="100" cy="86" r="4" fill="var(--ill-white)"/>
+  <path d="M96 74 q-8 -10 2 -18 q10 -8 2 -18" fill="none" stroke="var(--ill-gray)" stroke-width="4" opacity=".8"/>
+  <path d="M106 74 q8 -10 -2 -18 q-8 -8 4 -18" fill="none" stroke="var(--ill-gray)" stroke-width="3" opacity=".6"/>
+  <polygon points="78,30 122,30 112,16 88,16" fill="var(--ill-yellow)" stroke="var(--ill-dark)" stroke-width="2"/>
+  <rect x="94" y="0" width="12" height="16" fill="var(--ill-yellow)" stroke="var(--ill-dark)" stroke-width="2"/>
+  <path d="M86 36 l4 -4 M114 36 l-4 -4" stroke="var(--ill-dark)" stroke-width="2"/>`
+};
+
+const D=id=>`https://drive.google.com/file/d/${id}/view`;
+const HPRC=[
+{n:'01',t:'Tronaduras y uso de explosivos',rev:'Rev. marzo 2024',drive:'1_dT9XrlTkL-oIBkymqQ8CA5erNr3veXS',
+ lead:'Controla el almacenamiento, transporte y uso de explosivos para que nadie quede expuesto a una detonación no planificada.',
+ k:[['No fumar a menos de 15 m de explosivos','1.1.2'],['Polvorines cercados, cerrados y con inventario semanal','1.2–1.3'],['Patrón de tronadura cercado y señalizado','1.4.2'],['Zona de exclusión con loros comunicados por radio','1.6'],['Tormenta eléctrica a 8 km o menos: evacuar','1.9.2'],['Solo dinamiteros con licencia','3.2.5']],
+ f:['Ingreso a zona de tronadura sin autorización','Tiros quedados sin señalizar tras la inspección']},
+{n:'02',t:'Buses y transporte de personas',rev:'Rev. marzo 2024',drive:'1gqLYBj1l-7W7KyD7zhv-ntOSG74yaRmC',
+ lead:'Aplica a vehículos de 12 o más pasajeros. Asegura que el bus resista un vuelco y que todos puedan evacuar.',
+ k:[['Inspección diaria; con falla crítica queda fuera de servicio','1.2.1'],['ROPS (ECE-R66), IVMS, ABS, ESC y TCS','2.1.1'],['Cinturón para conductor y todos los pasajeros','2.1.1'],['Neumáticos no recauchados','2.1.1'],['Rompevidrios, extintor y vía de evacuación señalizada','2.1.1'],['En zona operativa: baliza, pértiga, cámara de retroceso y 2 cuñas','2.2.1']],
+ f:['Pasajeros sin cinturón','Bus estacionado sin cuñas']},
+{n:'03',t:'Grúas e izamientos',rev:'Rev. marzo 2024',drive:'1velv7jdgtlWzalT5aj6vTl119OzNRFw0',
+ lead:'Evita que una carga suspendida caiga o golpee a alguien, y que la grúa se vuelque.',
+ k:[['Todo izaje con plan de izaje y evaluación de riesgos','1.1.1'],['Carga controlada con vientos o cuerdas guía','1.1.2'],['Zona de exclusión con barricada bajo la carga','1.1.4–1.1.5'],['Grúas y aparejos con certificado vigente','1.2.1'],['Izaje crítico: ≥80 % capacidad (móvil), >100 t o varias grúas','1.3'],['Estabilizadores extendidos sobre placas o durmientes','2.3.1–2.3.2'],['Pestillo de seguridad en todos los ganchos','2.2.5'],['Nadie bajo carga suspendida ni en la línea de fuego','3.2–3.3']],
+ f:['Personas bajo la carga','Eslinga sin certificado o gancho sin pestillo']},
+{n:'04',t:'Perforación',rev:'Rev. marzo 2024',drive:'1sCoBPQZCJJjmnrXVsKvQUAnQBif10XQ1',
+ lead:'Protege al operador y al ayudante de partes en movimiento, mangueras de alta presión y caída de objetos en la perforadora.',
+ k:[['Inspección al ingresar a faena y preoperacional diario','1.1'],['Bloqueo LOTO para mantención','1.2'],['Zona de exclusión por mangueras y caída de objetos','1.3'],['No subir al mástil sobre 1,8 m','1.5'],['Protecciones con enclavamiento y 3 paradas de emergencia','2.1'],['Mangueras de alta presión con cable antilatigazo','2.2']],
+ f:['Mangueras sin whipcheck','Guardas retiradas o puenteadas']},
+{n:'05',t:'Trabajos eléctricos',rev:'Rev. marzo 2024',drive:'1ikz9DeLLbLRF_T1uWP_5KI7V3nCIE4kU',
+ lead:'Evita el contacto con energía eléctrica: todo circuito se trata como energizado hasta que se prueba lo contrario.',
+ k:[['Circuito energizado hasta probarlo','1.1.1'],['Trabajo energizado solo con permiso','1.1.5'],['Prohibido puentear protecciones','1.1.8'],['Distancia mínima a líneas aéreas','1.1.10'],['Herramientas y extensiones inspeccionadas y con código de color','1.2.2'],['Diferencial (RCD/GFCI) en tomas y equipos portátiles','2.2.3'],['Generadores y soldadoras conectados a tierra','2.2.4'],['Solo personal calificado (licencia SEC)','3.1']],
+ f:['Extensión sin color del mes o dañada','Generador sin tierra ni diferencial']},
+{n:'06',t:'Caída de objetos',rev:'Rev. marzo 2024',drive:'1CowA3sswigcn9r4lWa8y4hE6HkBaE1pV',
+ lead:'Evita que herramientas, materiales o cargas caigan sobre personas, desde altura o desde una gata.',
+ k:[['Lo almacenado sobre 2 m va asegurado','1.1.4'],['Objetos de más de 5 kg en racks diseñados o en el piso','1.1.5'],['Zona de exclusión con barricada bajo el trabajo en altura','1.2.2–1.2.4'],['La gata solo levanta: soporte secundario certificado para trabajar bajo la carga','2.1.1'],['Rodapiés y herramientas amarradas en altura','2.3'],['Carga asegurada para el transporte','2.4']],
+ f:['Trabajo bajo equipo apoyado solo en gata','Material suelto en altura en bodega']},
+{n:'07',t:'Control del terreno',rev:'Rev. marzo 2024',drive:'1c7Km2z3RN9mopjIy3Aa7ToWP8V5QO6_l',
+ lead:'Protege de derrumbes y caída de rocas desde taludes, bancos y paredes del rajo.',
+ k:[['Inspección geotécnica diaria y después de cada evento','1.2.1'],['Resultados comunicados antes de iniciar','1.2.4'],['Zona de exclusión al pie y en la cresta de taludes','1.3.1'],['Activadores TARP definidos','1.3.3'],['Bermas, pretiles y barreras','1.4.1'],['Toma 5 / AST que mire el terreno arriba y abajo','3.2.1']],
+ f:['Equipo trabajando al pie de un talud sin evaluar','Pretil incompleto o bajo']},
+{n:'08',t:'Equipos móviles pesados (HME)',rev:'Rev. marzo 2024',drive:'1vZEEq0lmnPlNEDjVlF3jARIl12Pw5dH9',
+ lead:'Cargadores, excavadoras, motoniveladoras, bulldozers y rodillos. Busca que el equipo esté en condición y que lo opere alguien autorizado.',
+ k:[['Inspección diaria; con falla crítica queda fuera de servicio','1.2.1'],['ROPS/FOPS, doble freno, cinturón de 3 puntas y supresión de incendios','2.1.1'],['Acceso con 3 puntos de contacto y puntos de bloqueo LOTO','2.1.1'],['En zona operativa: proximidad, baliza independiente de la llave y cámara de retroceso','2.2.1'],['Mínimo 2 cuñas si no tiene orugas','2.2.1'],['Operador capacitado, competente y autorizado en ese equipo','3.1.2']],
+ f:['Equipo estacionado sin cuñas','Checklist firmado sin revisar']},
+{n:'09',t:'Aislamiento de energía peligrosa (LOTO)',rev:'Rev. marzo 2024',drive:'13hUgHCFje9-3U3ieUxsg1vwgVl1vX2Ix',
+ lead:'Antes de intervenir un equipo, toda su energía queda aislada, bloqueada y comprobada en cero.',
+ k:[['Identificar todas las fuentes de energía y designar un dueño del aislamiento','1.1'],['Probar energía cero; quien llega después también verifica','1.1'],['Candado personal de cada trabajador, con llave única','1.1'],['Cada uno retira su propio candado','1.1'],['Prohibido aislar con circuitos de control, PLC o selectores','2.1.4'],['Equipos arrendados deben traer puntos de bloqueo','2.1.1']],
+ f:['Mantención sin candado personal','Bloqueo solo con la llave de contacto']},
+{n:'10',t:'Vehículos livianos',rev:'Rev. marzo 2024',drive:'1uiFczhouB5eePOzbGQDW0ySEfKKj1zxF',
+ lead:'Camionetas y vehículos menores: protección de los ocupantes y visibilidad frente a equipos grandes.',
+ k:[['Inspección diaria; con falla crítica queda fuera de servicio','1.2.1'],['5★ Euro NCAP, IVMS, ABS, ESC y airbags','2.1.1'],['Neumáticos no recauchados','2.1.1'],['Extintor, rompevidrios, triángulos y chaleco','2.1.1'],['En zona operativa: baliza y pértiga con luz, radio y alarma de retroceso','2.2.1'],['2 cuñas, y que se usen','2.2.1'],['Conductor con evaluación teórica y práctica','3.1.1']],
+ f:['Camioneta sin cuñas aplicadas','Pértiga o baliza sin funcionar']},
+{n:'11',t:'Entorno vial',rev:'Rev. marzo 2024',drive:'1YBGjXCpM7RKO0bQRWtUTs_6jgzqv6l_m',
+ lead:'Reglas de tránsito dentro de la faena para separar equipos grandes, vehículos livianos y peatones.',
+ k:[['Inspección previa documentada en cada turno','1.5.5'],['Estacionar en reversa; nunca en el punto ciego de un HME','1.5.8'],['Sin drenaje en V ni implemento apoyado: usar cuñas','1.5.9'],['Loros cuando un HME se mueve en talleres o zonas peatonales','1.5.10'],['Separación mínima de 50 m entre vehículos','1.5.14'],['Prohibido usar el celular conduciendo','1.5.15'],['Preferencia: emergencia → extracción → otros HME → livianos','1.5.13']],
+ f:['Estacionado de frente','Celular en mano conduciendo']},
+{n:'12',t:'Trabajo en altura',rev:'Rev. marzo 2024',drive:'1Knk66j9UzbSTCUCkH1EoIqxGvFHmEEzD',
+ lead:'Sobre 1,8 m de posible caída se exige protección. Incluye escaleras, andamios y plataformas elevadoras (manlift).',
+ k:[['Protección contra caídas sobre 1,8 m','1.1.2'],['Plan de rescate escrito y probado','1.4'],['Amarre al 100 %: siempre una cola conectada','2.1.3'],['Anclajes de 22,5 kN por persona','2.2.1'],['Manlift: arnés siempre conectado a la canasta y operador con licencia','2.10'],['Andamio con tarjeta vigente e inspección diaria','2.12'],['La cinta de peligro no es barricada','Def.']],
+ f:['Manlift sin arnés conectado','Andamio sin tarjeta']},
+{n:'14',t:'Trabajos en y alrededor del agua',rev:'Rev. 19-11-2025',drive:'11UQp6Z_3pmYXoovzKn_jO6_SowR6yUbg',
+ lead:'Piscinas, relaves y tranques: evita que una persona o un equipo caiga al agua y se ahogue.',
+ k:[['Procedimiento escrito y evaluación de riesgos previa','1.1'],['Prohibido trabajar solo con riesgo de ahogamiento','1.2.1'],['Suelo evaluado por persona calificada antes de operar cerca','1.5'],['Barreras contra ingreso de equipos al agua','1.7'],['Persona de guardia con línea de vista y radio','1.8'],['Chaleco salvavidas con silbato','2.5.1']],
+ f:['Equipo junto a piscina sin barrera','Trabajador solo en borde de relave']},
+{n:'17',t:'Humos metálicos de soldadura',rev:'Rev. 05-09-2025',drive:'1WALSJJmqAn_htMKWH4Dmo-Ecza_He93B',
+ lead:'Reduce la exposición a humos metálicos al soldar, cortar o esmerilar, tanto del soldador como de quien está cerca.',
+ k:[['Evaluación de exposición por higienista ocupacional','1.1.2'],['Zona de exclusión alrededor de la soldadura','1.2.1'],['Extracción localizada (0,5 m/s en el arco)','2.1'],['En interiores, abrir puertas o ventanas no basta','2.1.13'],['Superficie limpia de grasa y pintura','2.2'],['PAPR obligatorio si suelda más de 1 h al día','2.3.3']],
+ f:['Soldadura en taller sin extracción','Ayudantes dentro del humo sin protección']}
+];
+
+const svg=(n,label)=>`<svg viewBox="0 0 200 140" role="img" aria-label="${label}" xmlns="http://www.w3.org/2000/svg">${ART[n]}</svg>`;
+const strip=document.getElementById('strip'),pic=document.getElementById('pic'),info=document.getElementById('info'),count=document.getElementById('count');
+let cur=0;
+try{const h=location.hash.match(/HPRC-(\d+)/);if(h){const i=HPRC.findIndex(x=>x.n===h[1]);if(i>=0)cur=i}}catch(e){}
+
+HPRC.forEach((h,i)=>{
+  const b=document.createElement('button');b.type='button';b.className='thumb';
+  b.innerHTML=svg(h.n,'')+`<span>HPRC-${h.n}</span>`;b.title=h.t;
+  b.addEventListener('click',()=>show(i));strip.appendChild(b);
+});
+
+function show(i){
+  cur=(i+HPRC.length)%HPRC.length;const h=HPRC[cur];
+  pic.href=D(h.drive);pic.title=`Abrir HPRC-${h.n} (PDF)`;
+  pic.innerHTML=svg(h.n,`Ilustración HPRC-${h.n}: ${h.t}`)+`<span class="open">Abrir estándar ↗</span>`;
+  info.innerHTML=`<span class="code">HPRC-${h.n}</span>
+    <h2>${h.t}</h2><div class="rev">${h.rev}</div>
+    <p class="lead">${h.lead}</p>
+    <h3>Requisitos clave</h3>
+    <ul>${h.k.map(([t,c])=>`<li>${t} <span class="cl">[${c}]</span></li>`).join('')}</ul>
+    <h3>Qué mirar en terreno</h3>
+    <div class="field"><ul>${h.f.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  [...strip.children].forEach((t,j)=>t.setAttribute('aria-current',j===cur?'true':'false'));
+  strip.children[cur].scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+  count.textContent=`${cur+1} de ${HPRC.length}`;
+  try{history.replaceState(null,'','#HPRC-'+h.n)}catch(e){}
+}
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.getElementById('next').onclick=()=>show(cur+1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1)});
+let x0=null;document.getElementById('stage').addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+document.getElementById('stage').addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)show(cur+(dx<0?1:-1));x0=null});
+show(cur);
+</script>
+
+</body>
+</html>
