@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Compromisos que Salvan Vidas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800;900&family=Inter:wght@400;600;700&display=swap">
+<style>
+/* Mesa oscura, libro al centro; páginas a escala con unidades de contenedor */
+:root{
+  color-scheme:dark;
+  --desk:#141826; --desk2:#1f2537; --ink-ui:#e8ebf2; --muted-ui:#9aa3b8;
+  --navy:#1c2a63; --navy-deep:#16224f; --sky:#c7d3ea; --orange:#e8612c;
+  --coral:#ef6079; --peach:#f39a6b; --paper:#fbfaf6; --text:#2a2f3a;
+  --display:"Montserrat","Segoe UI",Arial,sans-serif; --body:"Inter","Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:radial-gradient(ellipse at 50% 30%,var(--desk2),var(--desk) 70%);color:var(--ink-ui);font-family:var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{max-width:1100px;margin:0 auto;padding-block:18px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.top h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(1.05rem,2.6vw,1.4rem);letter-spacing:.01em}
+.top h1 span{font-weight:300}
+.top p{margin:0;color:var(--muted-ui);font-size:.85rem}
+
+.stage{max-width:min(1100px,calc((100vh - 190px) * 1.414));margin:0 auto;padding-block:8px}
+@media (max-width:700px){.stage{max-width:min(100%,calc((100vh - 200px) * .707))}}
+#book{margin:0 auto}
+.page{background:var(--paper);overflow:hidden}
+.pi{position:absolute;inset:0;container-type:size;display:flex;flex-direction:column;padding:9cqw 8.5cqw 7cqw}
+.page.l .pi::after,.page.r .pi::after{content:"";position:absolute;top:0;bottom:0;width:9cqw;pointer-events:none}
+.page.l .pi::after{right:0;background:linear-gradient(to left,rgba(0,0,0,.18),transparent)}
+.page.r .pi::after{left:0;background:linear-gradient(to right,rgba(0,0,0,.14),transparent)}
+.navy{background:var(--navy);color:#fff}
+.navy .pi{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%)}
+
+/* Portada */
+.cover .pi{padding:0}
+.stripes{position:absolute;top:0;right:0;width:62cqw;height:30cqh}
+.cover h2{position:absolute;left:14cqw;top:34cqh;margin:0;font-family:var(--display);line-height:1.08;white-space:nowrap}
+.cover h2 .a{display:block;font-weight:300;font-size:7.4cqw;color:#f4a3a7;letter-spacing:.01em}
+.cover h2 .b{display:block;font-weight:800;font-size:8.8cqw;background:linear-gradient(90deg,var(--coral),var(--peach));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cover .logo{position:absolute;right:9cqw;bottom:7cqh;width:28cqw}
+.back .pi{align-items:center;justify-content:center;text-align:center}
+.back .lead{font-family:var(--display);font-weight:800;font-size:4.2cqw;letter-spacing:.04em;margin-bottom:6cqw}
+.back svg{width:78cqw;height:auto}
+
+/* Textos comunes */
+.kicker{font-family:var(--display);font-weight:800;font-size:6.6cqw;line-height:1.08;margin:0 0 6cqw;text-transform:uppercase}
+.navy p{font-size:4.15cqw;line-height:1.45;margin:0 0 4.2cqw}
+.foot{margin-top:auto;font-family:var(--display);font-weight:800;font-size:3.5cqw;letter-spacing:.03em;color:var(--sky)}
+
+/* Índice */
+.toc .pi{padding:8cqw 7cqw 6cqw}
+.toc .intro{font-size:3.9cqw;line-height:1.35;margin:0 0 3.5cqw}
+.toc ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.3cqh;flex:1}
+.toc button{all:unset;cursor:pointer;display:flex;align-items:center;gap:4cqw;font-family:var(--display);font-weight:600;font-size:4.5cqw;line-height:1.15;color:#fff;border-radius:2cqw;padding:.4cqh 1cqw}
+.toc button:hover,.toc button:focus-visible{background:rgba(255,255,255,.08)}
+.toc button:focus-visible{outline:2px solid var(--peach)}
+.toc .ic{width:11cqw;flex:none}
+
+/* Compromiso: página azul */
+.medal{width:56cqw;aspect-ratio:1;border-radius:50%;background:#fff;border:2.2cqw solid var(--orange);display:grid;place-items:center;margin:0 0 8cqw 6cqw}
+.medal svg{width:78%;height:78%}
+.ctitle{font-family:var(--display);font-weight:900;font-size:8.2cqw;line-height:1.05;color:var(--sky);text-transform:uppercase;margin:auto 0 3cqw;padding-bottom:3cqw;border-bottom:1px solid rgba(199,211,234,.55)}
+.ctitle.long{font-size:7.2cqw}
+.always{font-size:4.5cqw;line-height:1.42;margin:0 0 8cqw;color:#eef2fa}
+.always b{font-weight:700;color:#fff}
+
+/* Compromiso: página blanca */
+.rtitle{font-family:var(--display);font-weight:900;font-size:7.4cqw;line-height:1.05;color:var(--navy);text-transform:uppercase;margin:0 0 6cqw}
+.bul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3.4cqw}
+.bul li{position:relative;padding-left:4.4cqw;font-size:4.15cqw;line-height:1.38;color:var(--text)}
+.bul li::before{content:"";position:absolute;left:0;top:1.55cqw;width:1.9cqw;height:1.9cqw;background:var(--orange)}
+.pgn{position:absolute;bottom:3.6cqw;font-size:3cqw;color:#9097a6;font-variant-numeric:tabular-nums}
+.page.l .pgn{left:7cqw}.page.r .pgn{right:7cqw}
+.navy .pgn{color:rgba(199,211,234,.6)}
+
+/* Valores */
+.vals .pi{padding:8cqw 8cqw 6cqw}
+.vals h3{font-family:var(--display);font-size:7.4cqw;color:var(--navy);margin:0 0 4cqw;font-weight:300}
+.vals h3 b{font-weight:900}
+.vals h4{font-family:var(--display);font-weight:900;font-size:4.2cqw;color:var(--navy);margin:2.6cqw 0 1.6cqw;text-transform:uppercase}
+.vals dl{margin:0}
+.vals dt{font-weight:700;font-size:3.5cqw;color:var(--navy);margin-top:2.2cqw}
+.vals dd{margin:0;font-size:3.45cqw;line-height:1.35;color:var(--text)}
+.owner .pi{justify-content:flex-end;padding-bottom:16cqw}
+.owner p{font-size:4.2cqw;color:var(--text);margin:0 0 9cqw}
+.owner .line{border-bottom:1.5px solid #8a8f9b}
+
+/* Controles */
+.bar{max-width:1100px;margin:0 auto;padding-block:14px 8px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.bar button,.bar select{font:600 .9rem var(--body);color:var(--ink-ui);background:#262d42;border:1px solid #3a4360;border-radius:999px;padding:9px 16px;cursor:pointer}
+.bar button:hover,.bar select:hover{border-color:var(--peach)}
+.bar button:focus-visible,.bar select:focus-visible{outline:2px solid var(--peach);outline-offset:2px}
+.bar select{max-width:240px}
+#count{min-width:120px;text-align:center;color:var(--muted-ui);font-variant-numeric:tabular-nums;font-size:.9rem}
+.note{max-width:760px;margin:0 auto;padding-block:6px 28px;text-align:center;color:var(--muted-ui);font-size:.78rem;line-height:1.5}
+
+/* Sin librería de hojeo: páginas en cuadrícula */
+#book.flat{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;max-width:1100px}
+#book.flat .page{position:relative;aspect-ratio:420/594;border-radius:4px}
+#book.flat .pi::after{display:none}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1><span>Compromisos que</span> Salvan Vidas</h1>
+  <p>Hojea desde la esquina de la página, con las flechas o con los botones.</p>
+</header>
+
+<main class="stage"><div id="book" aria-label="Folleto Compromisos que Salvan Vidas"></div></main>
+
+<nav class="bar" aria-label="Navegación del folleto">
+  <button id="prev" type="button">◀ Anterior</button>
+  <span id="count" aria-live="polite"></span>
+  <button id="next" type="button">Siguiente ▶</button>
+  <select id="goto" aria-label="Ir a una sección"></select>
+</nav>
+<p class="note">Versión digital del folleto impreso «Compromisos que Salvan Vidas» de Teck, transcrita por RentaMaq para consulta del personal en faena Carmen de Andacollo. El documento impreso es la referencia oficial.</p>
+
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+<script>
+const TECK_WHITE = "data:image/png;base64,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";
+const O = 'stroke="#e8612c" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+const F = 'fill="#e8612c"';
+const ICON = {
+apto:`<path ${O} d="M50 36c-5-11-21-9-20 3 1 9 20 18 20 18s19-9 20-18c1-12-15-14-20-3z"/><path ${O} d="M35 43h7l3-6 4 11 3-7h12"/>
+ <circle ${O} cx="30" cy="72" r="13"/><path ${O} d="M24 72l4 4 8-9"/>
+ <circle ${O} cx="70" cy="72" r="13"/><path ${O} d="M61 81l18-18"/><path ${O} d="M66 64h8l-1 7a3 3 0 0 1-6 0z M70 74v6 M67 80h6"/>`,
+epp:`<path ${O} d="M14 38a15 15 0 0 1 30 0z M10 38h38 M29 23v-3"/>
+ <rect ${O} x="12" y="46" width="14" height="9" rx="4"/><rect ${O} x="32" y="46" width="14" height="9" rx="4"/><path ${O} d="M26 50h6"/>
+ <path ${O} d="M18 70c0-6 22-6 22 0v6c0 8-22 8-22 0z"/><circle ${O} cx="16" cy="78" r="5"/><circle ${O} cx="42" cy="78" r="5"/>
+ <circle ${O} cx="70" cy="20" r="6"/><path ${O} d="M61 30h18l4 26h-6l-2 26h-5l-1-20-1 20h-5l-2-26h-6z"/><path ${O} d="M70 30v34"/>`,
+gruas:`<path ${O} d="M50 6v18"/><path ${O} d="M50 24a5 5 0 1 0 5 5"/><path ${O} d="M50 32 34 46 M50 32l16 14"/>
+ <rect ${O} x="30" y="46" width="40" height="22"/><path ${O} d="M30 46l40 22 M70 46 30 68"/>
+ <path ${O} d="M8 80h66"/><path stroke="#e8612c" stroke-width="5" d="M12 80h6 M26 80h6 M40 80h6 M54 80h6 M68 80h6"/>
+ <circle ${O} cx="84" cy="56" r="4"/><path ${O} d="M84 61v14 M84 75l-4 12 M84 75l5 12 M84 66l-6-5 M84 66l6 2"/>`,
+caida:`<path ${O} d="M30 12v24 M22 12h16"/><path ${O} d="M14 52l12-6 M18 58l-6 4"/><circle ${O} cx="22" cy="49" r="4"/>
+ <path ${O} d="M36 88l8-30 8 30z M39 78h10"/>
+ <path ${O} d="M50 88 72 10 M58 88 80 10"/><path ${O} d="M54 74l8 2 M58 60l8 2 M62 46l8 2 M66 32l8 2 M70 18l8 2"/>
+ <circle ${O} cx="84" cy="38" r="5"/><path ${O} d="M84 44v20 M84 64l-5 18 M84 64l6 18 M84 50l-7 8"/><rect ${O} x="72" y="58" width="9" height="7"/>`,
+loto:`<circle ${O} cx="26" cy="30" r="12"/><circle ${O} cx="26" cy="30" r="5"/><path ${O} d="M26 15v3 M26 42v3 M11 30h3 M38 30h3"/>
+ <circle ${O} cx="50" cy="16" r="10"/><path ${O} d="M50 16l5-4"/>
+ <circle ${O} cx="74" cy="30" r="12"/><path ${O} d="M76 21l-6 10h7l-5 9"/>
+ <path ${O} d="M42 54v-6a8 8 0 0 1 16 0v6"/><rect x="38" y="54" width="24" height="20" rx="3" ${F}/>
+ <path ${O} d="M30 66c-6 4-6 16 4 20h30c6 0 8-6 4-8l-8-4"/>`,
+altura:`<circle ${O} cx="42" cy="20" r="7"/><path ${O} d="M42 28v24 M42 52l-8 18 M42 52l8 18 M42 34l-14 10 M42 34l14 10"/>
+ <path ${O} d="M36 30l12 16 M48 30 36 46 M35 50h14"/><path ${O} d="M44 34 86 10"/><circle ${O} cx="86" cy="10" r="3"/>
+ <rect x="14" y="70" width="44" height="16" ${F}/>`,
+espacios:`<path ${O} d="M50 22c0-6 32-6 32 0v58c0 6-32 6-32 0z M50 22c0 6 32 6 32 0"/>
+ <circle ${O} cx="22" cy="28" r="6"/><path ${O} d="M22 35v22 M22 57l-6 22 M22 57l6 22 M22 41l-8 10 M22 41l10 6"/>
+ <path ${O} d="M38 86h-14v-8h14z M31 78c0-10 14-8 14-18s-10-8-10-16"/>
+ <circle ${O} cx="68" cy="50" r="5"/><path ${O} d="M68 56l-4 14h10 M64 70l-4 10 M66 60l8 4"/>`,
+proteccion:`<rect ${O} x="12" y="26" width="48" height="44"/><path ${O} d="M22 26v44 M32 26v44 M42 26v44 M52 26v44 M12 40h48 M12 56h48"/>
+ <circle ${O} cx="74" cy="22" r="6"/><path ${O} d="M74 29v26 M74 55l-8 26 M74 55l8 26 M74 36l-16 8 M74 36l10 10"/>`,
+vehiculos:`<circle ${O} cx="50" cy="64" r="24"/><circle ${O} cx="50" cy="64" r="8"/><path ${O} d="M28 58h14 M58 58h14 M50 72v14"/>
+ <circle ${O} cx="20" cy="22" r="10"/><rect ${O} x="16" y="16" width="8" height="12" rx="1"/>
+ <circle ${O} cx="50" cy="14" r="10"/><path ${O} d="M44 8l12 12 M44 18h10"/>
+ <circle ${O} cx="80" cy="22" r="10"/><path ${O} d="M76 16v10h8v4 M76 16h4"/>`,
+permiso:`<circle ${O} cx="50" cy="12" r="8"/><path ${O} d="M46 12l3 3 5-6"/>
+ <rect ${O} x="40" y="30" width="22" height="30"/><path ${O} d="M45 38h12 M45 44h12 M45 50h8"/>
+ <circle ${O} cx="20" cy="30" r="6"/><path ${O} d="M20 37v24 M20 61l-6 22 M20 61l6 22 M20 43l20 4"/>
+ <circle ${O} cx="82" cy="30" r="6"/><path ${O} d="M82 37v24 M82 61l-6 22 M82 61l6 22 M82 43l-20 6"/>`
+};
+const ico = k => `<svg viewBox="0 0 100 100" aria-hidden="true">${ICON[k]}</svg>`;
+const mini = k => `<svg class="ic" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#fff" stroke="#e8612c" stroke-width="5"/><g transform="translate(17 17) scale(.66)">${ICON[k]}</g></svg>`;
+
+const TOC = [['apto','Apto/a para el trabajo'],['epp','Equipo de protección personal'],['gruas','Grúas, izaje y elevación'],['caida','Caída de objetos'],['loto','Aislamiento/bloqueo de energías peligrosas'],['altura','Trabajo en altura'],['espacios','Espacios confinados'],['proteccion','Protección de equipos y máquinas'],['vehiculos','Vehículos y conducción'],['permiso','Permiso de trabajo/ Autorización de trabajo']];
+
+const C = [
+{k:'epp',t:'Equipo de protección personal (EPP)',y:'llevaré el EPP adecuado para la tarea y comprobaré que está en buen estado antes de utilizarlo.',
+ b:['Asegúrate de que tu EPP se ajusta correctamente.','Conoce cómo utilizar correctamente los EPP.','Mantén tu EPP en buen estado y conoce cuándo debes sustituirlo.','No utilices ningún EPP que esté dañado o que no sea seguro.']},
+{k:'gruas',t:'Grúas, izaje y elevación',y:'me mantendré fuera de las zonas con cargas suspendidas o de cualquier posición en la que pueda ser golpeado por un objeto en movimiento.',
+ b:['Crea zonas de exclusión claras para mantener alejadas a otras personas durante las operaciones de elevación.','No cruces las barreras a menos que se cuente con autorización.','Mantén a la vista y bajo control el movimiento de la grúa y la carga en todo momento.','Mantén una comunicación constante con tu equipo durante los izajes o elevaciones.','Detén el izaje si no puedes ver la maniobra con claridad o si no puedes comunicarte con tu equipo.','Asegura que los izajes estén planificados y dentro de los límites de seguridad de la grúa y/o del equipo de levante.','Comprueba que las grúas y los aparejos (accesorios de izaje) son seguros y están listos para su uso.']},
+{k:'apto',t:'Apto/a para el trabajo',y:'estaré física y mentalmente preparado/a para trabajar con seguridad.',
+ b:['Nunca presentarse al trabajo bajo los efectos de las drogas o el alcohol.','Duerme bien y lo suficiente antes de empezar cada turno.','Informa a tu supervisor/a sobre cualquier medicación o afección (física o mental) que pueda comprometer tu capacidad para trabajar de forma segura.','Pide ayuda si te sientes estresado/a o te preocupa la seguridad de tu entorno de trabajo.','Alza la voz si ves a alguien con dificultades o que no se encuentra apto para el trabajo.']},
+{k:'loto',t:'Aislamiento/ bloqueo de energías peligrosas',y:'identificaré, aislaré y controlaré todas las fuentes de energía peligrosa antes de comenzar cualquier trabajo.',
+ b:['Usa candados individuales para bloquear las fuentes de energía, garantizando que sólo el propietario/a pueda retirarlas.','Asegura que no hay energía en el sistema antes de empezar a trabajar.','Sólo las personas entrenadas y autorizadas pueden realizar aislamientos/bloqueos de energía.','Sigue los procedimientos y autorizaciones específicas para trabajar en sistemas energizados.']},
+{k:'caida',t:'Caída de objetos',y:'estableceré zonas de exclusión claras debajo de las áreas donde los objetos puedan caer y rebotar.',
+ b:['No ingreses a las zonas de exclusión señalizadas por peligro de caída.','Instala protecciones como pantallas, rodapiés o redes para impedir la caída de objetos.','Asegura las herramientas y los materiales con amarras o sujeciones.','Retira todos los objetos que no necesites.','Comprueba que los objetos están bien sujetos antes de trasladarlos o almacenarlos.']},
+{k:'espacios',t:'Espacios confinados',y:'confirmaré con una persona adecuada que el espacio confinado es seguro y que existe una “persona de reserva (o stand by)” antes de entrar.',
+ b:['Asegúrate de conocer los peligros y que has completado el permiso de ingreso al espacio confinado.','Aísla y bloquea energías peligrosas.','Instala y comprueba que la ventilación funciona correctamente.','Continúa analizando la condición del aire mientras estés dentro del espacio confinado.','Asegura los espacios confinados cuando no se encuentren controlados.','Debes estar preparado para utilizar tu plan de rescate de emergencia.']},
+{k:'proteccion',t:'Protección de equipos y máquinas',y:'me aseguraré que los resguardos y las barreras de seguridad necesarias estén colocadas correctamente.',
+ b:['Comprueba periódicamente que las protecciones están bien colocadas.','Etiqueta el equipo como fuera de servicio hasta que esté debidamente protegido.','Aísla el equipo antes de retirar las protecciones.','Siempre reemplaza las protecciones antes de volver a poner en marcha el equipo.','Conoce dónde están las paradas de emergencia y verifica que puedes alcanzarlas rápidamente.']},
+{k:'vehiculos',t:'Vehículos y conducción',y:'comprobaré que el vehículo es seguro para ser conducido y que se adapta a las condiciones del camino.',
+ b:['Opera o conduce un equipo solo si tienes las competencias y autorización para hacerlo.','Realiza inspecciones de pre-uso y asegura que el vehículo cuenta con el equipo necesario antes de ponerlo en funcionamiento.','Respeta todas las normas de tráfico.','Usa siempre el cinturón de seguridad.','Utiliza sistemas de comunicación aprobados durante la conducción.','Asegura correctamente todas las cargas en vehículos livianos y buses.','Conoce las zonas designadas para estacionar y estabiliza el vehículo con cuñas o dispositivos similares.']},
+{k:'altura',t:'Trabajo en altura',y:'usaré equipo de protección personal contra caídas cuando trabaje a más de 1,8 metros (6 pies) y, cuando sea necesario, usaré barreras duras y otros dispositivos para evitar caídas.',
+ b:['Comprueba que tu equipo de protección contra caídas se ajusta bien y está en buen estado.','Siempre debes engancharte a puntos de anclaje seguros, resistentes y homologados.','Utiliza únicamente andamios inspeccionados y homologados.','Instala barreras cerca de los bordes o de las aberturas en el suelo y/o la pared.','Inspecciona las escaleras y plataformas antes de cada uso.','Debes estar preparado/a para utilizar el plan de rescate de emergencia.']},
+{k:'permiso',t:'Permiso de trabajo/ Autorización de trabajo',y:'confirmaré si se requiere un permiso o autorización de trabajo y obtendré la aprobación antes de empezar la tarea.',
+ b:['Asegura que todas las personas implicadas conocen el trabajo que se realizarán y disponen de los permisos o autorizaciones necesarias.','Siempre sigue el permiso de trabajo y las medidas de control.','Detente y vuelve a evaluar si las condiciones del trabajo cambian.','Haz un traspaso adecuado si el trabajo se prolonga más allá de tu turno.','Completa todos los pasos de trabajo antes de retomar las operaciones normales.']}
+];
+const startOf = k => 3 + 2 * C.findIndex(c => c.k === k);
+
+const stripes = `<svg class="stripes" viewBox="0 0 260 130" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ef6079"/><stop offset="1" stop-color="#f6b07a"/></linearGradient></defs>${[0,1,2,3,4,5,6,7].map(i=>`<polygon points="${30+i*30},130 ${52+i*30},0 ${66+i*30},0 ${44+i*30},130" fill="url(#g)" opacity="${.75+i*.03}"/>`).join('')}</svg>`;
+
+const stamp = `<svg viewBox="0 0 300 300" aria-label="Sello Compromisos que Salvan Vidas, Yo siempre"><defs>
+<path id="at" d="M48 150a102 102 0 0 1 204 0"/><path id="ab" d="M46 150a104 104 0 0 0 208 0"/></defs>
+<circle cx="150" cy="150" r="138" fill="none" stroke="#fff" stroke-width="7"/><circle cx="150" cy="150" r="80" fill="none" stroke="#fff" stroke-width="4"/>
+<text font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="21" fill="#fff" letter-spacing="1.5"><textPath href="#at" startOffset="50%" text-anchor="middle">COMPROMISOS QUE</textPath></text>
+<text font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="21" fill="#fff" letter-spacing="1.5"><textPath href="#ab" startOffset="50%" text-anchor="middle" dominant-baseline="hanging">SALVAN VIDAS</textPath></text>
+<rect x="8" y="122" width="284" height="50" fill="#1c2a63" transform="rotate(-6 150 147)"/>
+<g transform="rotate(-6 150 147)"><line x1="8" y1="124" x2="292" y2="124" stroke="#fff" stroke-width="4"/><line x1="8" y1="170" x2="292" y2="170" stroke="#fff" stroke-width="4"/>
+<text x="150" y="157" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-style="italic" font-size="30" fill="#fff">YO SIEMPRE…</text></g>
+<image href="${TECK_WHITE}" x="122" y="186" width="56" height="23"/></svg>`;
+
+const pages = [];
+const P = (cls, html, extra='') => pages.push({cls, html, extra});
+P('navy cover', `${stripes}<h2><span class="a">COMPROMISOS QUE</span><span class="b">SALVAN VIDAS</span></h2><img class="logo" src="${TECK_WHITE}" alt="Teck">`, 'data-density="hard"');
+P('navy', `<h2 class="kicker">Todas y todos regresan a casa sanos y salvos todos los días</h2>
+ <p>En Teck, proteger la salud y la seguridad de nuestra gente es un valor fundamental.</p>
+ <p>Nuestro trabajo nos expone a peligros que pueden causar lesiones graves, enfermedades o muertes. Los Compromisos que Salvan Vidas proporcionan controles esenciales para gestionar estos riesgos.</p>
+ <p>Además de estos Compromisos que Salvan Vidas, se deben seguir todos los controles, procedimientos y normas de salud y seguridad.</p>
+ <p>Si una tarea no se puede realizar de forma segura, tienes todo nuestro apoyo para ser valiente, alzar la voz y DETENER el trabajo. Eres responsable de tu seguridad y de la de quienes te rodean. Ayuda a garantizar que todas y todos regresen a casa sanos y salvos cada día.</p>`);
+P('navy toc', `<p class="intro">Este folleto proporciona información para gestionar lo siguiente:</p><ul>${TOC.map(([k,t])=>`<li><button type="button" data-go="${startOf(k)}">${mini(k)}<span>${t}</span></button></li>`).join('')}</ul>`);
+C.forEach(c => {
+  P('navy', `<div class="medal">${ico(c.k)}</div><h2 class="ctitle${c.t.length>34?' long':''}">${c.t}</h2><p class="always"><b>Yo siempre</b> ${c.y}</p><div class="foot">YO SOY UN LÍDER DE SEGURIDAD VALIENTE</div>`);
+  P('', `<h2 class="rtitle">${c.t}</h2><ul class="bul">${c.b.map(x=>`<li>${x}</li>`).join('')}</ul>`);
+});
+P('vals', `<h3>NUESTROS <b>VALORES</b></h3>
+ <h4>Así somos</h4><dl><dt>Responsables y valientes</dt><dd>Hacemos lo correcto, incluso cuando es difícil o se requiere una acción enérgica.</dd>
+ <dt>Respetuosos e Inclusivos</dt><dd>Creemos que todas las personas son importantes y que juntos somos mejores.</dd>
+ <dt>Humildes y determinados</dt><dd>Somos abiertos y escuchamos, aprendemos y somos incansables en la búsqueda de la excelencia.</dd></dl>
+ <h4>Así trabajamos</h4><dl><dt>Salud y Seguridad</dt><dd>Hacemos lo que sea necesario para garantizar que todos y todas vuelvan a casa sanos y salvos cada día.</dd>
+ <dt>Sustentabilidad</dt><dd>Aseguramos el bienestar de las personas, comunidades y los entornos que se nos han confiado.</dd>
+ <dt>Excelencia</dt><dd>Logramos un desempeño sobresaliente a través de la innovación y el compromiso con el mejoramiento continuo en eficiencia y productividad.</dd></dl>`);
+P('owner', `<p>Este libro pertenece a:</p><div class="line"></div>`);
+P('navy back', `<div class="lead">YO SOY UN LÍDER DE SEGURIDAD VALIENTE</div>${stamp}`, 'data-density="hard"');
+
+const book = document.getElementById('book');
+book.innerHTML = pages.map((p,i)=>{
+  const side = i===0||i===pages.length-1 ? '' : (i%2 ? ' l' : ' r');
+  const num = (i>0 && i<pages.length-1) ? `<span class="pgn">${i}</span>` : '';
+  return `<div class="page ${p.cls}${side}" ${p.extra}><div class="pi">${p.html}${num}</div></div>`;
+}).join('');
+
+const sections = [['Portada',0],['Introducción',1],...C.map(c=>[c.t,startOf(c.k)]),['Nuestros valores',23],['Contraportada',25]];
+const sel = document.getElementById('goto');
+sel.innerHTML = '<option value="">Ir a…</option>' + sections.map(([t,i])=>`<option value="${i}">${t}</option>`).join('');
+const count = document.getElementById('count');
+const total = pages.length;
+const label = i => i===0 ? 'Portada' : i===total-1 ? 'Contraportada' : `Página ${i} de ${total-2}`;
+
+let flip = null;
+function go(n){ if(flip) flip.flip(n); else { const el=book.children[n]; if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); } }
+if (window.St && St.PageFlip) {
+  flip = new St.PageFlip(book, {width:420,height:594,size:'stretch',minWidth:260,maxWidth:620,minHeight:368,maxHeight:877,
+    showCover:true,maxShadowOpacity:.45,mobileScrollSupport:false,usePortrait:true,flippingTime:750,clickEventForward:true});
+  flip.loadFromHTML(document.querySelectorAll('#book .page'));
+  const upd = () => { count.textContent = label(flip.getCurrentPageIndex()); };
+  flip.on('flip', upd); flip.on('changeOrientation', upd); upd();
+  document.getElementById('prev').onclick = () => flip.flipPrev();
+  document.getElementById('next').onclick = () => flip.flipNext();
+  document.addEventListener('keydown', e => { if(e.target.tagName==='SELECT') return; if(e.key==='ArrowRight') flip.flipNext(); if(e.key==='ArrowLeft') flip.flipPrev(); });
+} else {
+  book.classList.add('flat'); count.textContent = `${total} páginas`;
+  document.getElementById('prev').hidden = true; document.getElementById('next').hidden = true;
+}
+book.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.stopPropagation(); go(+b.dataset.go); } });
+sel.addEventListener('change', () => { if (sel.value !== '') go(+sel.value); sel.value = ''; });
+</script>
+</body>
+</html>
