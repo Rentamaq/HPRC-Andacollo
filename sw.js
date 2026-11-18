@@ -2,12 +2,12 @@
 // Al primer ingreso con internet guarda la guía, la revista, los 14 estándares y sus PDF.
 // Cambia VERSION cada vez que se suban cambios para que los equipos descarguen lo nuevo.
 const PREFIX = 'hprc-andacollo-';
-const VERSION = PREFIX + 'v2';
+const VERSION = PREFIX + 'v3';
 const CODES = ['01','02','03','04','05','06','07','08','09','10','11','12','14','17'];
 const CORE = [
   './', './index.html',
   './logos/rentamaq.png', './logos/teck.png',
-  './compromisos/', './compromisos/index.html',
+  './compromisos/', './compromisos/index.html', './compromisos/compromisos-que-salvan-vidas.pdf',
   './pdfjs/pdf.min.js', './pdfjs/pdf.worker.min.js',
   ...CODES.map(c => `./estandares/HPRC-${c}.html`),
   ...CODES.map(c => `./pdf/HPRC-${c}.pdf`)
