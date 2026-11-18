@@ -40,9 +40,21 @@ body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"
 .brand .lg-teck{height:38px}
 .brand .sep{width:1px;align-self:stretch;background:var(--plate-line)}
 @media (max-width:420px){.brand{gap:12px;padding:8px 12px}.brand .lg-rm{height:24px}.brand .lg-teck{height:30px}}
-header h1{margin:0;font-size:clamp(1.4rem,3.5vw,2rem);letter-spacing:-.01em}
-header p{margin:.35rem 0 0;color:var(--muted);max-width:70ch}
-.mag{display:inline-block;margin-top:12px;background:var(--ill-dark);color:#fff;font-weight:700;font-size:.92rem;text-decoration:none;padding:9px 16px;border-radius:999px;border:2px solid var(--accent)}
+.hprc-head h1{margin:0;font-size:clamp(1.4rem,3.5vw,2rem);letter-spacing:-.01em}
+.hprc-head p,.csv-head p{margin:.35rem 0 0;color:var(--muted);max-width:70ch}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:4px 0 18px;overflow-x:auto}
+.tabs button{font:inherit;font-weight:700;font-size:.98rem;color:var(--muted);background:none;border:0;border-bottom:4px solid transparent;margin-bottom:-2px;padding:10px 16px;cursor:pointer;white-space:nowrap;border-radius:8px 8px 0 0}
+.tabs button:hover{color:var(--ink);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+@media (max-width:560px){.tabs{overflow:visible}.tabs button{flex:1;white-space:normal;text-align:center;font-size:.88rem;padding:8px 6px;line-height:1.2}}
+.csv-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.csv-head p{margin:0}
+#csv-frame iframe{display:block;width:100%;height:max(560px,calc(100vh - 230px));border:0;border-radius:14px;background:#141826}
+.csv-card{background:var(--ill-dark);color:#fff;border-radius:14px;padding:28px 22px;display:grid;gap:12px;justify-items:start}
+.csv-card h2{margin:0;font-size:1.3rem}
+.csv-card p{margin:0;color:#c9ced8;max-width:60ch}
+.mag{display:inline-block;background:var(--ill-dark);color:#fff;font-weight:700;font-size:.92rem;text-decoration:none;padding:9px 16px;border-radius:999px;border:2px solid var(--accent)}
 .mag:hover{background:var(--accent);color:var(--accent-ink)}
 .mag:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .bar{height:6px;background:repeating-linear-gradient(-45deg,var(--accent) 0 14px,var(--ill-dark) 14px 28px);border-radius:3px;margin:14px 0 18px}
@@ -88,10 +100,25 @@ footer a{color:inherit}
       <span class="sep" aria-hidden="true"></span>
       <img src="logos/teck.png" alt="Teck" class="lg-teck" width="586" height="238">
     </div>
+  </header>
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="t-hprc" aria-controls="tab-hprc" aria-selected="true">Estándares HPRC</button>
+    <button type="button" role="tab" id="t-csv" aria-controls="tab-csv" aria-selected="false" tabindex="-1">Compromisos que Salvan Vidas</button>
+  </div>
+
+  <section id="tab-csv" role="tabpanel" aria-labelledby="t-csv" hidden>
+    <div class="csv-head">
+      <p>Versión digital del folleto Teck. Hojea desde la esquina de la página o usa los botones de la revista.</p>
+      <a class="mag" href="https://rentamaq.github.io/HPRC-Andacollo/compromisos/" target="_blank" rel="noopener">Abrir en ventana aparte ↗</a>
+    </div>
+    <div id="csv-frame"></div>
+  </section>
+
+  <section id="tab-hprc" role="tabpanel" aria-labelledby="t-hprc">
+  <div class="hprc-head">
     <h1>Estándares HPRC · Riesgos altos potenciales</h1>
     <p>Los 14 estándares Teck que aplican en faena, uno a uno. Pincha la imagen para abrir el documento oficial (PDF en Drive). Usa las flechas del teclado o las miniaturas para avanzar.</p>
-    <a class="mag" href="https://rentamaq.github.io/HPRC-Andacollo/compromisos/" target="_blank" rel="noopener">Ver revista «Compromisos que Salvan Vidas» →</a>
-  </header>
+  </div>
   <div class="bar" aria-hidden="true"></div>
 
   <nav class="strip" id="strip" aria-label="Lista de estándares"></nav>
@@ -112,6 +139,7 @@ footer a{color:inherit}
     Los números entre corchetes son cláusulas del estándar. La carpeta no incluye HPRC-13, HPRC-15 ni HPRC-16 (Barricadas).
     · <a href="https://drive.google.com/drive/folders/14zAcVbBlLNZ2hqHFWgs56Vu832uKujrW?usp=sharing" target="_blank" rel="noopener">Carpeta completa en Drive</a>
   </footer>
+  </section>
 </div>
 
 <script>
@@ -348,14 +376,44 @@ function show(i){
   [...strip.children].forEach((t,j)=>t.setAttribute('aria-current',j===cur?'true':'false'));
   strip.children[cur].scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
   count.textContent=`${cur+1} de ${HPRC.length}`;
-  try{history.replaceState(null,'','#HPRC-'+h.n)}catch(e){}
+  try{if(!document.getElementById('tab-hprc').hidden)history.replaceState(null,'','#HPRC-'+h.n)}catch(e){}
 }
 document.getElementById('prev').onclick=()=>show(cur-1);
 document.getElementById('next').onclick=()=>show(cur+1);
-document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1)});
+document.addEventListener('keydown',e=>{if(document.getElementById('tab-hprc').hidden||e.target.closest('[role="tablist"]'))return;if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1)});
 let x0=null;document.getElementById('stage').addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
 document.getElementById('stage').addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)show(cur+(dx<0?1:-1));x0=null});
+const startHash=location.hash;
 show(cur);
+
+/* Pestañas */
+const TABS={hprc:{btn:document.getElementById('t-hprc'),panel:document.getElementById('tab-hprc')},
+            csv:{btn:document.getElementById('t-csv'),panel:document.getElementById('tab-csv')}};
+const CSV_URL='https://rentamaq.github.io/HPRC-Andacollo/compromisos/';
+let csvLoaded=false;
+function loadCsv(){
+  if(csvLoaded)return; csvLoaded=true;
+  const box=document.getElementById('csv-frame');
+  if(/github\.io$/.test(location.hostname)){
+    box.innerHTML=`<iframe src="compromisos/" title="Revista Compromisos que Salvan Vidas" allow="fullscreen" allowfullscreen loading="lazy"></iframe>`;
+  }else{
+    box.innerHTML=`<div class="csv-card"><h2>Compromisos que Salvan Vidas</h2><p>La revista digital del folleto se abre en su propia página, con efecto de hojeo y pantalla completa.</p><a class="mag" href="${CSV_URL}" target="_blank" rel="noopener">Abrir la revista ↗</a></div>`;
+  }
+}
+function selectTab(key,focus){
+  Object.entries(TABS).forEach(([k,t])=>{const on=k===key;t.btn.setAttribute('aria-selected',on);t.btn.tabIndex=on?0:-1;t.panel.hidden=!on;});
+  if(focus)TABS[key].btn.focus();
+  if(key==='csv'){loadCsv();try{history.replaceState(null,'','#compromisos')}catch(e){}}
+  else{try{history.replaceState(null,'','#HPRC-'+HPRC[cur].n)}catch(e){}}
+}
+TABS.hprc.btn.addEventListener('click',()=>selectTab('hprc'));
+TABS.csv.btn.addEventListener('click',()=>selectTab('csv'));
+document.querySelector('.tabs').addEventListener('keydown',e=>{
+  if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+  e.preventDefault(); selectTab(TABS.hprc.btn.getAttribute('aria-selected')==='true'?'csv':'hprc',true);
+});
+if(startHash==='#compromisos')selectTab('csv');
+window.addEventListener('hashchange',()=>{if(location.hash==='#compromisos')selectTab('csv');});
 </script>
 
 </body>
