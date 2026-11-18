@@ -1,7 +1,8 @@
 // Modo sin conexión de la guía HPRC Andacollo.
 // Al primer ingreso con internet guarda la guía, la revista, los 14 estándares y sus PDF.
 // Cambia VERSION cada vez que se suban cambios para que los equipos descarguen lo nuevo.
-const VERSION = 'hprc-v1';
+const PREFIX = 'hprc-andacollo-';
+const VERSION = PREFIX + 'v2';
 const CODES = ['01','02','03','04','05','06','07','08','09','10','11','12','14','17'];
 const CORE = [
   './', './index.html',
@@ -30,7 +31,8 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k)));
+    // Solo borra versiones antiguas de ESTE sitio: rentamaq.github.io aloja otras apps con sus propios cachés.
+    await Promise.all(keys.filter(k => (k.startsWith(PREFIX) || k === 'hprc-v1') && k !== VERSION).map(k => caches.delete(k)));
     await self.clients.claim();
   })());
 });
@@ -43,7 +45,7 @@ async function networkFirst(req) {
     return res;
   } catch (e) {
     return (await cache.match(req, {ignoreSearch: true})) ||
-           (await cache.match('./index.html')) ||
+           (await cache.match(new URL('./index.html', self.registration.scope).href)) ||
            new Response('Sin conexión', {status: 503, headers: {'Content-Type': 'text/plain; charset=utf-8'}});
   }
 }
@@ -65,6 +67,9 @@ self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  // Solo atiende lo de este sitio y sus librerías; no toca otras apps de rentamaq.github.io.
+  const scope = self.registration.scope;
+  if (url.origin === location.origin && !req.url.startsWith(scope)) return;
   const isPage = req.mode === 'navigate' || (url.origin === location.origin && url.pathname.endsWith('.html'));
   event.respondWith(isPage ? networkFirst(req) : cacheFirst(req));
 });
