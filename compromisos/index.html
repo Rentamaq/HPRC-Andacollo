@@ -31,7 +31,8 @@ body{background:radial-gradient(ellipse at 50% 30%,var(--desk2),var(--desk) 70%)
 @media (max-width:700px){.stage{max-width:min(100%,calc((100vh - 200px) * .707))}}
 #book{margin:0 auto}
 .page{background:var(--paper);overflow:hidden}
-.pi{position:absolute;inset:0;container-type:size;display:flex;flex-direction:column;padding:9cqw 8.5cqw 7cqw}
+/* Márgenes en % del ancho de la página (no dependen de la ventana); los textos usan cqw del área útil */
+.pi{position:absolute;inset:0;container-type:size;display:flex;flex-direction:column;padding:9% 8.5% 7%}
 .page.l .pi::after,.page.r .pi::after{content:"";position:absolute;top:0;bottom:0;width:9cqw;pointer-events:none}
 .page.l .pi::after{right:0;background:linear-gradient(to left,rgba(0,0,0,.18),transparent)}
 .page.r .pi::after{left:0;background:linear-gradient(to right,rgba(0,0,0,.14),transparent)}
@@ -55,7 +56,7 @@ body{background:radial-gradient(ellipse at 50% 30%,var(--desk2),var(--desk) 70%)
 .foot{margin-top:auto;font-family:var(--display);font-weight:800;font-size:3.5cqw;letter-spacing:.03em;color:var(--sky)}
 
 /* Índice */
-.toc .pi{padding:8cqw 7cqw 6cqw}
+.toc .pi{padding:8% 7% 6%}
 .toc .intro{font-size:3.9cqw;line-height:1.35;margin:0 0 3.5cqw}
 .toc ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.3cqh;flex:1}
 .toc button{all:unset;cursor:pointer;display:flex;align-items:center;gap:4cqw;font-family:var(--display);font-weight:600;font-size:4.5cqw;line-height:1.15;color:#fff;border-radius:2cqw;padding:.4cqh 1cqw}
@@ -81,14 +82,14 @@ body{background:radial-gradient(ellipse at 50% 30%,var(--desk2),var(--desk) 70%)
 .navy .pgn{color:rgba(199,211,234,.6)}
 
 /* Valores */
-.vals .pi{padding:8cqw 8cqw 6cqw}
+.vals .pi{padding:8% 8% 6%}
 .vals h3{font-family:var(--display);font-size:7.4cqw;color:var(--navy);margin:0 0 4cqw;font-weight:300}
 .vals h3 b{font-weight:900}
 .vals h4{font-family:var(--display);font-weight:900;font-size:4.2cqw;color:var(--navy);margin:2.6cqw 0 1.6cqw;text-transform:uppercase}
 .vals dl{margin:0}
 .vals dt{font-weight:700;font-size:3.5cqw;color:var(--navy);margin-top:2.2cqw}
 .vals dd{margin:0;font-size:3.45cqw;line-height:1.35;color:var(--text)}
-.owner .pi{justify-content:flex-end;padding-bottom:16cqw}
+.owner .pi{justify-content:flex-end;padding-bottom:16%}
 .owner p{font-size:4.2cqw;color:var(--text);margin:0 0 9cqw}
 .owner .line{border-bottom:1.5px solid #8a8f9b}
 
@@ -98,6 +99,19 @@ body{background:radial-gradient(ellipse at 50% 30%,var(--desk2),var(--desk) 70%)
 .bar button:hover,.bar select:hover{border-color:var(--peach)}
 .bar button:focus-visible,.bar select:focus-visible{outline:2px solid var(--peach);outline-offset:2px}
 .bar select{max-width:240px}
+.bar .dl{font:700 .9rem var(--body);color:#1f2328;background:linear-gradient(90deg,var(--coral),var(--peach));border-radius:999px;padding:9px 16px;text-decoration:none}
+.bar .dl:hover{filter:brightness(1.08)}
+.bar .dl:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* Versión para PDF / impresión: una página del folleto por hoja A5 */
+@page{size:148mm 210mm;margin:0}
+html.printmode body{background:#fff;padding:0}
+html.printmode .top,html.printmode .bar,html.printmode .note{display:none}
+html.printmode .stage{max-width:none;padding:0}
+html.printmode #book.flat{display:block;max-width:none}
+html.printmode #book.flat .page{width:148mm;height:210mm;aspect-ratio:auto;border-radius:0;break-after:page;overflow:hidden}
+html.printmode #book.flat .page:last-child{break-after:auto}
+html.printmode *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 #count{min-width:120px;text-align:center;color:var(--muted-ui);font-variant-numeric:tabular-nums;font-size:.9rem}
 .note{max-width:760px;margin:0 auto;padding-block:6px 28px;text-align:center;color:var(--muted-ui);font-size:.78rem;line-height:1.5}
 
@@ -122,6 +136,7 @@ body{background:radial-gradient(ellipse at 50% 30%,var(--desk2),var(--desk) 70%)
   <button id="next" type="button">Siguiente ▶</button>
   <select id="goto" aria-label="Ir a una sección"></select>
   <button id="fs" type="button" hidden>⛶ Pantalla completa</button>
+  <a id="dl" class="dl" href="compromisos-que-salvan-vidas.pdf" download="Compromisos que Salvan Vidas.pdf">⬇ Descargar PDF</a>
 </nav>
 <p class="note">Versión digital del folleto impreso «Compromisos que Salvan Vidas» de Teck, transcrita por RentaMaq para consulta del personal en faena Carmen de Andacollo. El documento impreso es la referencia oficial.</p>
 
@@ -248,8 +263,10 @@ const total = pages.length;
 const label = i => i===0 ? 'Portada' : i===total-1 ? 'Contraportada' : `Página ${i} de ${total-2}`;
 
 let flip = null;
+const PRINT = /[?&]print\b/.test(location.search);
+if (PRINT) document.documentElement.classList.add('printmode');
 function go(n){ if(flip) flip.flip(n); else { const el=book.children[n]; if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); } }
-if (window.St && St.PageFlip) {
+if (!PRINT && window.St && St.PageFlip) {
   flip = new St.PageFlip(book, {width:420,height:594,size:'stretch',minWidth:260,maxWidth:620,minHeight:368,maxHeight:877,
     showCover:true,maxShadowOpacity:.45,mobileScrollSupport:false,usePortrait:true,flippingTime:750,clickEventForward:true});
   flip.loadFromHTML(document.querySelectorAll('#book .page'));
