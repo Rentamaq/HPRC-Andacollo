@@ -26,6 +26,8 @@ body{background:radial-gradient(ellipse at 50% 30%,var(--desk2),var(--desk) 70%)
 .top p{margin:0;color:var(--muted-ui);font-size:.85rem}
 
 .stage{max-width:min(1100px,calc((100vh - 190px) * 1.414));margin:0 auto;padding-block:8px}
+:fullscreen .stage{max-width:min(1600px,calc((100vh - 110px) * 1.414))}
+:fullscreen .top,:fullscreen .note{display:none}
 @media (max-width:700px){.stage{max-width:min(100%,calc((100vh - 200px) * .707))}}
 #book{margin:0 auto}
 .page{background:var(--paper);overflow:hidden}
@@ -119,6 +121,7 @@ body{background:radial-gradient(ellipse at 50% 30%,var(--desk2),var(--desk) 70%)
   <span id="count" aria-live="polite"></span>
   <button id="next" type="button">Siguiente ▶</button>
   <select id="goto" aria-label="Ir a una sección"></select>
+  <button id="fs" type="button" hidden>⛶ Pantalla completa</button>
 </nav>
 <p class="note">Versión digital del folleto impreso «Compromisos que Salvan Vidas» de Teck, transcrita por RentaMaq para consulta del personal en faena Carmen de Andacollo. El documento impreso es la referencia oficial.</p>
 
@@ -261,6 +264,27 @@ if (window.St && St.PageFlip) {
 }
 book.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.stopPropagation(); go(+b.dataset.go); } });
 sel.addEventListener('change', () => { if (sel.value !== '') go(+sel.value); sel.value = ''; });
+
+const fsBtn = document.getElementById('fs');
+const root = document.documentElement;
+const canFS = document.fullscreenEnabled || document.webkitFullscreenEnabled;
+const inFS = () => document.fullscreenElement || document.webkitFullscreenElement;
+if (canFS) {
+  fsBtn.hidden = false;
+  fsBtn.addEventListener('click', () => {
+    try {
+      if (inFS()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      else { const p = (root.requestFullscreen || root.webkitRequestFullscreen).call(root); if (p && p.catch) p.catch(() => {}); }
+    } catch (e) {}
+  });
+  const sync = () => {
+    fsBtn.textContent = inFS() ? '✕ Salir de pantalla completa' : '⛶ Pantalla completa';
+    setTimeout(() => { if (flip) flip.update(); }, 150);
+  };
+  document.addEventListener('fullscreenchange', sync);
+  document.addEventListener('webkitfullscreenchange', sync);
+}
+document.addEventListener('keydown', e => { if ((e.key === 'f' || e.key === 'F') && canFS && e.target.tagName !== 'SELECT') fsBtn.click(); });
 </script>
 </body>
 </html>
