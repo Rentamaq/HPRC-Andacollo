@@ -9,7 +9,7 @@
 :root{
   --bg:#eef1f3; --card:#ffffff; --ink:#1f2328; --muted:#5d6470; --line:#d5dbe0;
   --accent:#e0a100; --accent-ink:#1f2328; --danger:#c8372d;
-  --plate:#ffffff; --plate-line:#d5dbe0;
+  --plate:#ffffff; --plate-line:#d5dbe0; --ok-ink:#1f6b43; --ok-bg:#d9f2e4;
   --ill-sky:#e6eef5; --ill-ground:#c9b48f; --ill-rock:#a08a68; --ill-rock2:#7d6a4f;
   --ill-yellow:#f2b705; --ill-dark:#2b2f36; --ill-glass:#9fc6df; --ill-wheel:#2b2f36;
   --ill-white:#ffffff; --ill-red:#d64545; --ill-orange:#f07f1a; --ill-water:#4a8fc0;
@@ -20,14 +20,14 @@
     --bg:#16181c; --card:#1f2228; --ink:#ecebe7; --muted:#a3a8b1; --line:#343842;
     --accent:#f2b705; --accent-ink:#16181c; --danger:#ff6b5e;
     --ill-sky:#2a3440; --ill-ground:#6d5f48; --ill-rock:#7f6d52; --ill-rock2:#5c4e3a;
-    --ill-glass:#5d8aa8; --ill-white:#e9e9e9; --ill-water:#2f6c99; --ill-water2:#4f8cbb; color-scheme:dark;
+    --ill-glass:#5d8aa8; --ill-white:#e9e9e9; --ill-water:#2f6c99; --ill-water2:#4f8cbb; color-scheme:dark; --ok-ink:#7fdcaa; --ok-bg:#1d3a2b;
   }
 }
 :root[data-theme="dark"]{
   --bg:#16181c; --card:#1f2228; --ink:#ecebe7; --muted:#a3a8b1; --line:#343842;
   --accent:#f2b705; --accent-ink:#16181c; --danger:#ff6b5e;
   --ill-sky:#2a3440; --ill-ground:#6d5f48; --ill-rock:#7f6d52; --ill-rock2:#5c4e3a;
-  --ill-glass:#5d8aa8; --ill-white:#e9e9e9; --ill-water:#2f6c99; --ill-water2:#4f8cbb; color-scheme:dark;
+  --ill-glass:#5d8aa8; --ill-white:#e9e9e9; --ill-water:#2f6c99; --ill-water2:#4f8cbb; color-scheme:dark; --ok-ink:#7fdcaa; --ok-bg:#1d3a2b;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -48,6 +48,8 @@ body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"
 .tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
 .tabs button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
 @media (max-width:560px){.tabs{overflow:visible}.tabs button{flex:1;white-space:normal;text-align:center;font-size:.88rem;padding:8px 6px;line-height:1.2}}
+.hprc-head p.offline{display:inline-block;margin-top:10px;font-size:.85rem;font-weight:700;color:var(--ok-ink);background:var(--ok-bg);padding:5px 12px;border-radius:999px}
+.hprc-head p.offline[hidden]{display:none}
 .csv-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
 .csv-head p{margin:0}
 #csv-frame iframe{display:block;width:100%;height:max(560px,calc(100vh - 230px));border:0;border-radius:14px;background:#141826}
@@ -117,7 +119,8 @@ footer a{color:inherit}
   <section id="tab-hprc" role="tabpanel" aria-labelledby="t-hprc">
   <div class="hprc-head">
     <h1>Estándares HPRC · Riesgos altos potenciales</h1>
-    <p>Los 14 estándares Teck que aplican en faena, uno a uno. Pincha la imagen para abrir el documento oficial (PDF en Drive). Usa las flechas del teclado o las miniaturas para avanzar.</p>
+    <p>Los 14 estándares Teck que aplican en faena, uno a uno. Pincha la imagen para abrir el documento oficial. Usa las flechas del teclado o las miniaturas para avanzar.</p>
+    <p class="offline" id="offline" hidden>✓ Guardado en este equipo: funciona sin conexión</p>
   </div>
   <div class="bar" aria-hidden="true"></div>
 
@@ -292,6 +295,7 @@ const ART={
 };
 
 const D=id=>`https://drive.google.com/file/d/${id}/view`;
+const ON_SITE=/github\.io$/.test(location.hostname);
 const HPRC=[
 {n:'01',t:'Tronaduras y uso de explosivos',rev:'Rev. marzo 2024',drive:'1_dT9XrlTkL-oIBkymqQ8CA5erNr3veXS',
  lead:'Controla el almacenamiento, transporte y uso de explosivos para que nadie quede expuesto a una detonación no planificada.',
@@ -364,7 +368,9 @@ HPRC.forEach((h,i)=>{
 
 function show(i){
   cur=(i+HPRC.length)%HPRC.length;const h=HPRC[cur];
-  pic.href=D(h.drive);pic.title=`Abrir HPRC-${h.n} (PDF)`;
+  if(ON_SITE){pic.href=`estandares/HPRC-${h.n}.html`;pic.removeAttribute('target');}
+  else{pic.href=D(h.drive);pic.target='_blank';}
+  pic.title=`Abrir HPRC-${h.n}`;
   pic.innerHTML=svg(h.n,`Ilustración HPRC-${h.n}: ${h.t}`)+`<span class="open">Abrir estándar ↗</span>`;
   info.innerHTML=`<span class="code">HPRC-${h.n}</span>
     <h2>${h.t}</h2><div class="rev">${h.rev}</div>
@@ -414,6 +420,12 @@ document.querySelector('.tabs').addEventListener('keydown',e=>{
 });
 if(startHash==='#compromisos')selectTab('csv');
 window.addEventListener('hashchange',()=>{if(location.hash==='#compromisos')selectTab('csv');});
+
+/* Modo sin conexión (solo en el sitio de GitHub Pages) */
+if(ON_SITE&&'serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready)
+    .then(()=>{document.getElementById('offline').hidden=false;}).catch(()=>{});
+}
 </script>
 
 </body>
