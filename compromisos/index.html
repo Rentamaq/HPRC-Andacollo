@@ -265,6 +265,10 @@ if (window.St && St.PageFlip) {
 book.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.stopPropagation(); go(+b.dataset.go); } });
 sel.addEventListener('change', () => { if (sel.value !== '') go(+sel.value); sel.value = ''; });
 
+if ('serviceWorker' in navigator && /github\.io$/.test(location.hostname)) {
+  navigator.serviceWorker.register('../sw.js', {scope: '../'}).catch(() => {});
+}
+
 const fsBtn = document.getElementById('fs');
 const root = document.documentElement;
 const canFS = document.fullscreenEnabled || document.webkitFullscreenEnabled;
