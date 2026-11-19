@@ -286,25 +286,42 @@ if ('serviceWorker' in navigator && /github\.io$/.test(location.hostname)) {
   navigator.serviceWorker.register('../sw.js', {scope: '../'}).catch(() => {});
 }
 
-/* Descarga del PDF: se pide con fetch para que el modo sin conexión entregue la copia guardada en el equipo */
+/* Descarga del PDF.
+   El PDF se carga en memoria al abrir la revista (desde la copia guardada si no hay internet), así el botón
+   responde al instante: Safari en iPhone bloquea descargas que no ocurren justo en el toque.
+   En teléfonos se abre el menú Compartir con el PDF (Guardar en Archivos, WhatsApp, Imprimir…). */
 const dl = document.getElementById('dl');
-dl.addEventListener('click', async e => {
+const PDF_NAME = dl.getAttribute('download');
+const LABEL = dl.textContent;
+let pdfFile = null;
+function loadPdf() {
+  return fetch(dl.href).then(r => r.ok ? r.blob() : null)
+    .then(b => { if (b) pdfFile = new File([b], PDF_NAME, {type: 'application/pdf'}); })
+    .catch(() => {});
+}
+loadPdf();
+const touch = matchMedia('(pointer: coarse)').matches;
+function flash(msg) { dl.textContent = msg; clearTimeout(flash.t); flash.t = setTimeout(() => { dl.textContent = LABEL; }, 4000); }
+function saveBlob() {
+  const url = URL.createObjectURL(pdfFile);
+  const a = document.createElement('a');
+  a.href = url; a.download = PDF_NAME; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+  flash('✓ Descargado');
+}
+dl.addEventListener('click', e => {
   e.preventDefault();
-  const name = dl.getAttribute('download');
-  const label = dl.textContent;
-  dl.textContent = 'Preparando…';
-  try {
-    const r = await fetch(dl.href);
-    if (!r.ok) throw new Error(r.status);
-    const url = URL.createObjectURL(await r.blob());
-    const a = document.createElement('a');
-    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 30000);
-    dl.textContent = '✓ Descargado';
-  } catch (err) {
-    dl.textContent = navigator.onLine ? 'No se pudo descargar' : 'Sin conexión: abre la revista una vez con internet';
+  if (!pdfFile) {
+    if (!navigator.onLine) { flash('Sin conexión: abre la revista una vez con internet'); return; }
+    flash('Preparando… vuelve a tocar en un momento'); loadPdf(); return;
   }
-  setTimeout(() => { dl.textContent = label; }, 3500);
+  if (touch && navigator.canShare && navigator.canShare({files: [pdfFile]})) {
+    navigator.share({files: [pdfFile], title: 'Compromisos que Salvan Vidas'})
+      .then(() => flash('✓ Listo'))
+      .catch(err => { if (err && err.name === 'AbortError') return; saveBlob(); });
+    return;
+  }
+  saveBlob();
 });
 
 const fsBtn = document.getElementById('fs');
