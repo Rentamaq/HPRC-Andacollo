@@ -286,6 +286,27 @@ if ('serviceWorker' in navigator && /github\.io$/.test(location.hostname)) {
   navigator.serviceWorker.register('../sw.js', {scope: '../'}).catch(() => {});
 }
 
+/* Descarga del PDF: se pide con fetch para que el modo sin conexión entregue la copia guardada en el equipo */
+const dl = document.getElementById('dl');
+dl.addEventListener('click', async e => {
+  e.preventDefault();
+  const name = dl.getAttribute('download');
+  const label = dl.textContent;
+  dl.textContent = 'Preparando…';
+  try {
+    const r = await fetch(dl.href);
+    if (!r.ok) throw new Error(r.status);
+    const url = URL.createObjectURL(await r.blob());
+    const a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+    dl.textContent = '✓ Descargado';
+  } catch (err) {
+    dl.textContent = navigator.onLine ? 'No se pudo descargar' : 'Sin conexión: abre la revista una vez con internet';
+  }
+  setTimeout(() => { dl.textContent = label; }, 3500);
+});
+
 const fsBtn = document.getElementById('fs');
 const root = document.documentElement;
 const canFS = document.fullscreenEnabled || document.webkitFullscreenEnabled;
