@@ -495,7 +495,7 @@ function loadCsv(){
   if(csvLoaded)return; csvLoaded=true;
   const box=document.getElementById('csv-frame');
   if(/github\.io$/.test(location.hostname)){
-    box.innerHTML=`<iframe src="compromisos/" title="Revista Compromisos que Salvan Vidas" allow="fullscreen" allowfullscreen loading="lazy"></iframe>`;
+    box.innerHTML=`<iframe src="compromisos/" title="Revista Compromisos que Salvan Vidas" allow="fullscreen; web-share" allowfullscreen loading="lazy"></iframe>`;
   }else{
     box.innerHTML=`<div class="csv-card"><h2>Compromisos que Salvan Vidas</h2><p>La revista digital del folleto se abre en su propia página, con efecto de hojeo y pantalla completa.</p><a class="mag" href="${CSV_URL}" target="_blank" rel="noopener">Abrir la revista ↗</a></div>`;
   }
